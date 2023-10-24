@@ -8,8 +8,8 @@ void clrscr() {
     cout << "\033[2J\033[H";
 }
 
-void header(){
-    cout <<
+ostream &header(ostream & out){
+    out <<
     "+---------------------------------------------------------------------------+\n"
     "|                       "
                        <<ud<<"STUDENT MANAGEMENT SYSTEM"<<unud<<
@@ -21,4 +21,27 @@ void header(){
     "|             : Akaash Samson Gudlangari(22B-CO-005)                        |\n"
     "|             : Alex Joaquim Pereira    (22B-CO-006)                        |\n"
     "+---------------------------------------------------------------------------+\n";
+}
+
+ostream &menu(ostream &out){
+    out << endl;
+    int n = 3; //Change n value as number of menu arguments
+    char *str[n];
+    //You can add more options below as required
+    str[0] = "Enter student details\n";
+    str[1] = "Edit age of a student\n";
+    str[2] = "Append the address to a student file";
+    out << "MENU: \n";
+    out << "-----------------------------------------------------------------------------";
+    for(int i = 1; i <= n; i++){
+        out << endl;
+        out << "[";
+        out.setf(ios::left, ios::adjustfield);
+        out << i;
+        out << "]";
+        out.width(70);
+        out << str[i-1];
+    }
+    out << "\n-----------------------------------------------------------------------------\n";
+    out << "Choose your option: ";
 }
