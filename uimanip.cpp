@@ -2,14 +2,19 @@
 #include <iomanip>
 #define ud "\033[4m"
 #define unud "\033[24m"
+#define clrscr cout<<"\033[2J\033[H"
 using namespace std;
 
-void clrscr() {
-    cout << "\033[2J\033[H";
+void console_clear_screen() { // Can use instead of clrscr, this completely wipes concole out without a trace
+    #ifdef _WIN32
+    system("cls");
+    #elif defined(__linux__)
+    system("clear");
+    #endif
 }
 
-ostream &header(ostream & out){
-    out <<
+void header(){
+    cout <<
     "+---------------------------------------------------------------------------+\n"
     "|                       "
                        <<ud<<"STUDENT MANAGEMENT SYSTEM"<<unud<<
@@ -23,7 +28,7 @@ ostream &header(ostream & out){
     "+---------------------------------------------------------------------------+\n";
 }
 
-ostream &menu(ostream &out){
+ostream &menu_og(ostream &out){ // Redundant now, menu is in the main file directly
     out << endl;
     int n = 3; //Change n value as number of menu arguments
     char *str[n];
