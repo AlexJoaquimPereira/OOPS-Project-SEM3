@@ -1,0 +1,94 @@
+#include <iostream>
+#include <iomanip>
+#include<fstream>
+#include<sstream>
+#define ud "\033[4m"
+#define unud "\033[24m"
+using namespace std;
+
+class Student
+{
+    protected:
+    string name; // Also use char[], bcz string isn't taught till date
+    int age;
+    string branch;
+    string StudentID;
+
+    public:
+    Student(){}
+    void groupdetails();
+    void setName(string name); // Bruh combine all these into some getdata() function, and then feed into a file there itself(create anothe function or class to operate on files)
+    void setBranch(string branch);
+    void setAge(int age);
+    void setStudentID(string id);
+    void enteredDetails();
+    void saveToFile();
+
+};
+
+void Student :: groupdetails()
+{
+    cout <<
+    "+---------------------------------------------------------------------------+\n"
+    "|                       "
+                       <<ud<<"STUDENT MANAGEMENT SYSTEM"<<unud<<
+                                                     "                           |\n"
+    "| Developed by: Aaditya Salgaonkar      (22B-CO-001)                        |\n"
+    "|             : Aarya Desai             (22B-CO-002)                        |\n"
+    "|             : Aditi Malik             (22B-CO-003)                        |\n"
+    "|             : Ahmed Khan              (22B-CO-004)                        |\n"
+    "|             : Akaash Samson Gudlangari(22B-CO-005)                        |\n"
+    "|             : Alex Joaquim Pereira    (22B-CO-006)                        |\n"
+    "+---------------------------------------------------------------------------+\n";
+}
+
+void Student :: setName(string n)
+{
+    name=n;
+}
+
+void Student :: setBranch(string b)
+{
+    branch=b;
+}
+
+void Student :: setAge(int a)
+{
+    age=a;
+}
+
+void Student :: setStudentID(string id)
+{
+    StudentID=id;
+}
+
+void Student :: enteredDetails() 
+{
+        cout << "Student ID: " << StudentID << endl;
+        cout << "Name: " << name << endl;
+        cout << "Age: " << age << endl;
+        cout << "Branch: " << branch << endl;
+}
+
+void Student :: saveToFile()
+{
+    //to be done later
+}
+
+
+
+
+
+
+
+
+
+/* Commented out for testing purposes
+int main()
+{
+    Student tmp;
+    tmp.groupdetails();
+
+    return 0;
+}
+*/
