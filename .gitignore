@@ -35,3 +35,6 @@
 *.docx
 *.pdf
 *.txt
+
+# Some cpp files to ignore
+unified.cpp
