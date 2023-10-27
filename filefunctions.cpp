@@ -6,6 +6,35 @@
 #include "unified.cpp"
 using namespace std;
 
+void Student :: edit_age(int a){
+    age = a; //Or call saveToFile(this)from here
+    int pos = 0, digit = 0, r = roll;
+    ofstream F1;
+    char filename[24];
+    sprintf(filename, "%d.txt", roll);
+    F1.open(filename, ios::out);
+    pos = strlen(name);
+    while(r){
+        digit *= 10;
+        digit += r%10;
+        r /= 10;
+    }
+    pos = digit + strlen(name) ;
+    F1.seekp(pos, ios::beg);
+    F1 << age << "\n";
+    F1.close();
+}
+
+void Student :: append_address(char addr[]){
+    strcpy(address, addr);
+    ofstream F1;
+    char filename[24];
+    sprintf(filename, "%d.txt", roll);
+    F1.open(filename, ios::app);
+    F1 << address << "\n";
+    F1.close();
+}
+
 void saveToFile(Student s)
 {
     ofstream fout;
@@ -19,9 +48,9 @@ void saveToFile(Student s)
     fout.close();
 }
 
-void readfromfile(int r)
+Student readfromfile(int r)
 {
-    const int N = 20;
+    const int N = 50;
     char fn[N],fid[N],fage[N],fb[N]; 
     ifstream fin;
     char roll[N+4];
@@ -31,9 +60,7 @@ void readfromfile(int r)
     fin.getline(fn,N);
     fin.getline(fage,N);
     fin.getline(fb,N);
-    
-    cout << "Student ID: " << fid << endl;
-    cout << "Name: " << fn << endl;
-    cout << "Age: " << fage << endl;
-    cout << "Branch: " << fb << endl;
+
+    Student s(fn, (int)fage, fb, (int)fid);
+    return s;
 }
