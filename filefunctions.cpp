@@ -13,7 +13,6 @@ void Student :: edit_age(int a){
     char filename[24];
     sprintf(filename, "%d.txt", roll);
     F1.open(filename, ios::out);
-    pos = strlen(name);
     while(r){
         digit *= 10;
         digit += r%10;
@@ -39,7 +38,7 @@ void saveToFile(Student s)
 {
     ofstream fout;
     char roll[24];
-    sprintf(roll, "%d.txt");
+    sprintf(roll, "%d.txt", s.roll);
     fout.open(roll);
     fout<<s.roll<<endl;
     fout<<s.name<<endl;
@@ -54,7 +53,7 @@ Student readfromfile(int r)
     char fn[N],fid[N],fage[N],fb[N]; 
     ifstream fin;
     char roll[N+4];
-    sprintf(roll, "%d.txt");
+    sprintf(roll, "%d.txt", r);
     fin.open(roll);
     fin.getline(fid,N);
     fin.getline(fn,N);
