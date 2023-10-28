@@ -38,3 +38,6 @@
 
 # Some cpp files to ignore
 unified.cpp
+
+# Visual Studio Code
+.vscode
