@@ -7,15 +7,14 @@
 using namespace std;
 
 void Student :: edit_age(int a){
-    age = a; //Or call saveToFile(this)from here
+    age = a;
     int pos = 0, digit = 0, r = roll;
     ofstream F1;
     char filename[24];
     sprintf(filename, "%d.txt", roll);
     F1.open(filename, ios::out);
     while(r){
-        digit *= 10;
-        digit += r%10;
+        digit++;
         r /= 10;
     }
     pos = digit + strlen(name) ;
@@ -50,7 +49,7 @@ void saveToFile(Student s)
 Student readfromfile(int r)
 {
     const int N = 50;
-    char fn[N],fid[N],fage[N],fb[N]; 
+    char fn[N],fid[N],fage[N],fb[N], faddr[N]; 
     ifstream fin;
     char roll[N+4];
     sprintf(roll, "%d.txt", r);
@@ -59,7 +58,27 @@ Student readfromfile(int r)
     fin.getline(fn,N);
     fin.getline(fage,N);
     fin.getline(fb,N);
+    if(!fin.eof()){
+        fin.getline(faddr, N);
+        Student s1(fn, stoi(fage), fb, stoi(fid), faddr);
+        return s1;
+    }
+    Student s1(fn, stoi(fage), fb, stoi(fid));
+    return s1;
+}
 
-    Student s(fn, (int)fage, fb, (int)fid);
-    return s;
+void putroll(int roll){
+    ofstream F1;
+    F1.open("stud_details/roll.txt", ios::out | ios::trunc);
+    F1 << roll;
+    F1.close();
+}
+
+int getroll(){
+    char a[10];
+    ifstream F1;
+    F1.open("stud_details/roll.txt", ios::in);
+    F1.getline(a, 10);
+    F1.close();
+    return stoi(a);
 }
