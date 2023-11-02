@@ -29,8 +29,19 @@ void edit_age(int rollno){
 }
 
 void append_address(int rollno){
-    //Fill the function
+    char filename[24];
+    sprintf(filename, "%d.txt", rollno);
+    Student s;
+    fstream fin;
+    fin.open(filename, ios::ate | ios::in | ios::out | ios::binary);
+    cout<<"Enter the address:";
+    cin.ignore();
+    cin.getline(s.address, 50);
+    fin.seekp(0);
+    fin.write((char *) &s, sizeof(s));
+    fin.close();
 }
+
 
 void Student :: getdata(int r){
     roll = r;
