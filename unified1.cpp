@@ -129,7 +129,7 @@ int main(){
         rollcount = getroll();
     else putroll(0);
     f1.close();
-    clrscr;
+    cout << clrscr;
     do{
         header();
         cout << "MENU: \n";
