@@ -24,8 +24,30 @@ class Student{
     friend void saveToFile(Student);
 };
 
-void edit_age(int rollno){
-    // Fill the function
+// Update the edit_age function
+void edit_age(int rollno) {
+    int newAge;
+    cout << "Enter the new age for roll number " << rollno << ": ";
+    cin >> newAge;
+    if (newAge < 0) {
+        cout << "Invalid age value. Age cannot be negative.\n";
+        return;
+    }
+    Student student;
+    char filename[24];
+    sprintf(filename, "%d.txt", rollno);
+    ifstream fin(filename, ios::in);
+    if (!fin.is_open()) {
+        cout << "Student data file not found.\n";
+        return;
+    }
+    fin.read((char*)&student, sizeof(student));
+    fin.close();
+    student.age = newAge;
+    ofstream fout(filename, ios::out);
+    fout.write((char*)&student, sizeof(student));
+    fout.close();
+    cout << "Age updated successfully.\n";
 }
 
 void append_address(int rollno){
