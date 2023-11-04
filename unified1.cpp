@@ -156,26 +156,31 @@ int main(){
                 s.getdata(rollcount);
                 saveToFile(s);
                 readfromfile(rollcount);
+                getchar();
                 break;
             case 2:
                 cout << "Enter the roll number: ";
                 cin >> rollno;
                 if(rollno > rollcount || rollno <= 0){
                     cout << "Invalid roll number\n";
+                    getchar();
                     break;
                 }
                 edit_age(rollno);
                 readfromfile(rollno);
+                getchar();
                 break;         
             case 3:
             cout << "Enter the roll number: ";
                 cin >> rollno;
                 if(rollno > rollcount || rollno <= 0){
                     cout << "Invalid roll number\n";
+                    getchar();
                     break;
                 }
                 append_address(rollno);
                 readfromfile(rollno);
+                getchar();
                 break;
             case 4:
                 cout << "Do you want to view details of all students or only one? (y/n): ";
@@ -185,18 +190,22 @@ int main(){
                         readfromfile(i);
                         cout << "---------------------------\n";
                     }
+                    getchar();
                     break;
                 }
                 cout << "Enter the roll number of the student: ";
                 cin >> rollno;
                 if(rollno > rollcount || rollno <= 0){
                     cout << "Invalid roll number\n";
+                    getchar();
                     break;
                 }
                 readfromfile(rollno);
+                getchar();
                 break;
             case 5: break;
-            default: cout << "Invalid input\n";
+            default:cout << "Invalid input\n";
+                    getchar();
         }
         cin.ignore();
         cout << clrscr;
@@ -205,5 +214,6 @@ int main(){
 
     header();
     cout << "Thanks for interacting!\n";
-    while(1);
+    getchar();
+    getchar();
 }
