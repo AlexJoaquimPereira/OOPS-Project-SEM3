@@ -34,7 +34,7 @@ void append_address(int rollno){
     Student s;
     fstream fin;
     fin.open(filename, ios::ate | ios::in | ios::out | ios::binary);
-    if(!fin.is_open())
+    if(fin.bad())
     {
         cout<<"Error in opening the file!"<<endl;
         return;
@@ -103,12 +103,12 @@ void putroll(int roll){
 }
 
 int getroll(){
-    char a[10];
+    char a;
     ifstream F1;
     F1.open("roll.txt", ios::in);
-    F1.getline(a, 10);
+    F1 >> (a);
     F1.close();
-    return stoi(a);
+    return a - '0';
 }
 
 void header(){
@@ -131,7 +131,7 @@ int main(){
     int rollcount = 0, choice = 0, rollno, temp;
     char add[50], filename[24], c;
     ifstream f1("roll.txt", ios::in);
-    if(f1.is_open())
+    if(f1.good())
         rollcount = getroll();
     else putroll(0);
     f1.close();
