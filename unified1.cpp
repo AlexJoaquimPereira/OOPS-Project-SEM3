@@ -34,10 +34,16 @@ void append_address(int rollno){
     Student s;
     fstream fin;
     fin.open(filename, ios::ate | ios::in | ios::out | ios::binary);
+    if(!fin.is_open())
+    {
+        cout<<"Error in opening the file!"<<endl;
+        return;
+    }
+    fin.read((char *) &s, sizeof(s));
     cout<<"Enter the address:";
     cin.ignore();
     cin.getline(s.address, 50);
-    fin.seekp(0);
+    fin.seekp(0, ios::beg);
     fin.write((char *) &s, sizeof(s));
     fin.close();
 }
