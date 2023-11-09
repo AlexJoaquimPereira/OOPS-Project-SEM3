@@ -1,7 +1,8 @@
-#include<iostream>
-#include<fstream>
-#include<string.h>
-#include<stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include <stdio.h>
+#include <iomanip>
 
 #define ud "\033[4m"
 #define unud "\033[24m"
@@ -19,34 +20,36 @@ class Student{
     ~Student(){}
     void getdata(int);
     void enteredDetails();
+    void enteredDetailsInTableFormat();
     friend void append_address(int);
     friend void edit_age(int);
     friend void saveToFile(Student);
 };
 
-// Update the edit_age function
 void edit_age(int rollno) {
     int newAge;
     cout << "Enter the new age for roll number " << rollno << ": ";
     cin >> newAge;
-    if (newAge < 0) {
+    if (newAge < 0)
+    {
         cout << "Invalid age value. Age cannot be negative.\n";
         return;
     }
     Student student;
     char filename[24];
     sprintf(filename, "%d.txt", rollno);
-    ifstream fin(filename, ios::in);
-    if (fin.bad()) {
+    fstream file;
+    file.open(filename, ios::in | ios::out | ios::binary);
+    if (!file.is_open())
+    {
         cout << "Student data file not found.\n";
         return;
     }
-    fin.read((char*)&student, sizeof(student));
-    fin.close();
+    file.read(reinterpret_cast<char *>(&student), sizeof(student));
     student.age = newAge;
-    ofstream fout(filename, ios::out);
-    fout.write((char*)&student, sizeof(student));
-    fout.close();
+    file.seekp(0, ios::beg);
+    file.write(reinterpret_cast<char *>(&student), sizeof(student));
+    file.close();
     cout << "Age updated successfully.\n";
 }
 
@@ -54,35 +57,46 @@ void append_address(int rollno){
     char filename[24];
     sprintf(filename, "%d.txt", rollno);
     Student s;
-    fstream fin;
-    fin.open(filename, ios::ate | ios::in | ios::out | ios::binary);
-    if(fin.bad())
+    fstream file;
+    file.open(filename, ios::in | ios::out | ios::binary);
+    if (!file.is_open())
     {
-        cout<<"Error in opening the file!"<<endl;
+        cout << "Error in opening the file!" << endl;
         return;
     }
-    fin.read((char *) &s, sizeof(s));
-    cout<<"Enter the address:";
+    file.read(reinterpret_cast<char *>(&s), sizeof(s));
+    cout << "Enter the address: ";
     cin.ignore();
     cin.getline(s.address, 50);
-    fin.seekp(0, ios::beg);
-    fin.write((char *) &s, sizeof(s));
-    fin.close();
+    file.seekp(0, ios::beg);
+    file.write(reinterpret_cast<char *>(&s), sizeof(s));
+    file.close();
 }
 
-
-void Student :: getdata(int r){
+void Student::getdata(int r){
     roll = r;
     cout << "Roll number: " << roll << endl;
     cout << "Name: ";
     cin.ignore();
     cin.getline(name, 20);
-    cout << "Age: "; 
+    cout << "Age: ";
     cin >> age;
-    cout << "Branch: "; 
+    if (age < 0)
+    {
+        cout << "Invalid age value. Age cannot be negative.\n";
+        return;
+    }
+    cout << "Branch: ";
     cin.ignore();
     cin.getline(branch, 10);
     cin.ignore();
+}
+
+void Student::enteredDetails(){
+    cout.setf(ios::left, ios::adjustfield);
+    cout << "| " << setw(11) << roll << "| " << setw(21) << name << "| " << setw(4) << age << "| "
+         << setw(10) << branch << "| " << setw(18) << address << "|" << endl;
+    //cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
 }
 
 void Student::enteredDetailsInTableFormat() {
@@ -95,20 +109,13 @@ void Student::enteredDetailsInTableFormat() {
     //cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
 }
 
-void Student::enteredDetails() {
-    cout.setf(ios::left, ios::adjustfield);
-    cout << "| " << setw(11) << roll << "| " << setw(21) << name << "| " << setw(4) << age << "| "
-         << setw(10) << branch << "| " << setw(18) << address << "|" << endl;
-    //cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
-}
-
 void saveToFile(Student s)
 {
     ofstream fout;
     char roll[24];
     sprintf(roll, "%d.txt", s.roll);
-    fout.open(roll);
-    fout.write((char*) &s, sizeof(s));
+    fout.open(roll, ios::binary);
+    fout.write(reinterpret_cast<char *>(&s), sizeof(s));
     fout.close();
 }
 
@@ -118,13 +125,14 @@ void readfromfile(int r)
     sprintf(roll, "%d.txt", r);
     Student rf;
     ifstream fin;
-    fin.open(roll);
-    if (fin.fail()) {
+    fin.open(roll, ios::binary);
+    if (fin.fail())
+    {
         cout << "Error in opening the file!" << endl;
         return;
     }
-    fin.read((char*) &rf, sizeof(rf));
-    rf.enteredDetails();
+    fin.read(reinterpret_cast<char *>(&rf), sizeof(rf));
+    rf.enteredDetailsInTableFormat();
     fin.close();
 }
 
@@ -138,10 +146,11 @@ void readallfromfile(int r) {
         cout << "Error in opening the file!" << endl;
         return;
     }
-    fin.read((char*)&rf, sizeof(rf));
-rf.enteredDetailsInTableFormat();
+    fin.read(reinterpret_cast<char *>(&rf), sizeof(rf));
+    rf.enteredDetails();
     fin.close();
 }
+
 
 void putroll(int roll){
     ofstream F1;
@@ -160,24 +169,23 @@ int getroll(){
 }
 
 void header(){
-    cout <<
-    "+---------------------------------------------------------------------------+\n"
-    "|                       "
-                       <<ud<<"STUDENT MANAGEMENT SYSTEM"<<unud<<
-                                                     "                           |\n"
-    "| Developed by: Aaditya Salgaonkar      (22B-CO-001)                        |\n"
-    "|             : Aarya Desai             (22B-CO-002)                        |\n"
-    "|             : Aditi Malik             (22B-CO-003)                        |\n"
-    "|             : Ahmed Khan              (22B-CO-004)                        |\n"
-    "|             : Akaash Samson Gudlangari(22B-CO-005)                        |\n"
-    "|             : Alex Joaquim Pereira    (22B-CO-006)                        |\n"
-    "+---------------------------------------------------------------------------+\n";
+    cout << "+---------------------------------------------------------------------------+\n"
+         << "|                       "
+                            << ud << "STUDENT MANAGEMENT SYSTEM" << unud 
+                                                            << "                           |\n"
+         << "| Developed by: Aaditya Salgaonkar      (22B-CO-001)                        |\n"
+         << "|             : Aarya Desai             (22B-CO-002)                        |\n"        
+         << "|             : Aditi Malik             (22B-CO-003)                        |\n"
+         << "|             : Ahmed Khan              (22B-CO-004)                        |\n"
+         << "|             : Akaash Samson Gudlangari(22B-CO-005)                        |\n"
+         << "|             : Alex Joaquim Pereira    (22B-CO-006)                        |\n"
+         << "+---------------------------------------------------------------------------+\n";
 }
 
 int main(){
     Student s;
-    int rollcount = 0, choice = 0, rollno, temp;
-    char add[50], filename[24], c;
+    int rollcount = 0, choice = 0, rollno;
+    char c;
     ifstream f1("roll.txt", ios::in);
     if(f1.good())
         rollcount = getroll();
@@ -198,7 +206,7 @@ int main(){
         cin >> choice;
         cout << clrscr;
         header();
-        switch(choice){ 
+        switch (choice){
             case 1:
                 rollcount++;
                 s.getdata(rollcount);
@@ -217,11 +225,11 @@ int main(){
                 edit_age(rollno);
                 readfromfile(rollno);
                 getchar();
-                break;         
+                break;
             case 3:
-            cout << "Enter the roll number: ";
+                cout << "Enter the roll number: ";
                 cin >> rollno;
-                if(rollno > rollcount || rollno <= 0){
+                if (rollno > rollcount || rollno <= 0){
                     cout << "Invalid roll number\n";
                     getchar();
                     break;
@@ -231,17 +239,18 @@ int main(){
                 getchar();
                 break;
             case 4:
-                cout << "Do you want to view details of all students or only one? (all=y/one=n): ";
+                cout << "Do you want to view details of all students or only one? (y/n): ";
                 cin >> c;
                 if (c == 'y'){
-				int i=1;
-				readfromfile(i);
-                for (i = 2; i <= rollcount; i++) {
-                    readdetailsfromfile(i);
-                    //cout << "---------------------------\n";
+                    int i = 1;
+                    readfromfile(i);
+                    for (i = 2; i <= rollcount; i++){
+                        readallfromfile(i);
+                        cout << "---------------------------\n";
+                    }
+                    getchar();
+                    break;
                 }
-                break;
-            }
                 cout << "Enter the roll number of the student: ";
                 cin >> rollno;
                 if(rollno > rollcount || rollno <= 0){
@@ -252,17 +261,18 @@ int main(){
                 readfromfile(rollno);
                 getchar();
                 break;
-            case 5: break;
-            default:cout << "Invalid input\n";
-                    getchar();
-        }
+            case 5:
+                break;
+            default:
+                cout << "Invalid input\n";
+                getchar();
+            }
         cin.ignore();
         cout << clrscr;
-    }while(choice != 5);
+    } while(choice != 5);
     putroll(rollcount);
 
     header();
     cout << "Thanks for interacting!\n";
-    getchar();
     getchar();
 }
