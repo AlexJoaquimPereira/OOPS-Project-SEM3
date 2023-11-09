@@ -85,14 +85,14 @@ void Student :: getdata(int r){
     cin.ignore();
 }
 
-void Student :: enteredDetails() 
-{
-    cout << "Roll number: " << roll << endl;
-    cout << "Name: " << name << endl;
-    cout << "Age: " << age << endl;
-    cout << "Branch: " << branch << endl;
-    if(strcmp(address, ""))
-        cout << "Address: " << address << endl;
+void Student::enteredDetails() {
+    cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
+    cout << "| Roll Number| Name                 | Age | Branch    | Address           |" << endl;
+    cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
+    cout.setf(ios::left, ios::adjustfield);
+    cout << "| " << setw(11) << roll << "| " << setw(21) << name << "| " << setw(4) << age << "| "
+         << setw(10) << branch << "| " << setw(18) << address << "|" << endl;
+    //cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
 }
 
 void saveToFile(Student s)
@@ -112,6 +112,10 @@ void readfromfile(int r)
     Student rf;
     ifstream fin;
     fin.open(roll);
+    if (fin.fail()) {
+        cout << "Error in opening the file!" << endl;
+        return;
+    }
     fin.read((char*) &rf, sizeof(rf));
     rf.enteredDetails();
     fin.close();
