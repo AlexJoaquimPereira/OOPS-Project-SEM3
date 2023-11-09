@@ -231,16 +231,17 @@ int main(){
                 getchar();
                 break;
             case 4:
-                cout << "Do you want to view details of all students or only one? (y/n): ";
+                cout << "Do you want to view details of all students or only one? (all=y/one=n): ";
                 cin >> c;
-                if(c == 'y'){
-                    for(int i = 1; i <= rollcount; i++){
-                        readallfromfile(i);
-                        cout << "---------------------------\n";
-                    }
-                    getchar();
-                    break;
+                if (c == 'y'){
+				int i=1;
+				readfromfile(i);
+                for (i = 2; i <= rollcount; i++) {
+                    readdetailsfromfile(i);
+                    //cout << "---------------------------\n";
                 }
+                break;
+            }
                 cout << "Enter the roll number of the student: ";
                 cin >> rollno;
                 if(rollno > rollcount || rollno <= 0){
