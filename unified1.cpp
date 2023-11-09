@@ -37,7 +37,7 @@ void edit_age(int rollno) {
     char filename[24];
     sprintf(filename, "%d.txt", rollno);
     ifstream fin(filename, ios::in);
-    if (!fin.is_open()) {
+    if (fin.bad()) {
         cout << "Student data file not found.\n";
         return;
     }
@@ -85,10 +85,17 @@ void Student :: getdata(int r){
     cin.ignore();
 }
 
-void Student::enteredDetails() {
+void Student::enteredDetailsInTableFormat() {
     cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
     cout << "| Roll Number| Name                 | Age | Branch    | Address           |" << endl;
     cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
+    cout.setf(ios::left, ios::adjustfield);
+    cout << "| " << setw(11) << roll << "| " << setw(21) << name << "| " << setw(4) << age << "| "
+         << setw(10) << branch << "| " << setw(18) << address << "|" << endl;
+    //cout << "+------------+----------------------+-----+-----------+-------------------+" << endl;
+}
+
+void Student::enteredDetails() {
     cout.setf(ios::left, ios::adjustfield);
     cout << "| " << setw(11) << roll << "| " << setw(21) << name << "| " << setw(4) << age << "| "
          << setw(10) << branch << "| " << setw(18) << address << "|" << endl;
@@ -118,6 +125,21 @@ void readfromfile(int r)
     }
     fin.read((char*) &rf, sizeof(rf));
     rf.enteredDetails();
+    fin.close();
+}
+
+void readallfromfile(int r) {
+    char roll[24];
+    sprintf(roll, "%d.txt", r);
+    Student rf;
+    ifstream fin;
+    fin.open(roll, ios::binary);
+    if (fin.fail()) {
+        cout << "Error in opening the file!" << endl;
+        return;
+    }
+    fin.read((char*)&rf, sizeof(rf));
+rf.enteredDetailsInTableFormat();
     fin.close();
 }
 
@@ -213,7 +235,7 @@ int main(){
                 cin >> c;
                 if(c == 'y'){
                     for(int i = 1; i <= rollcount; i++){
-                        readfromfile(i);
+                        readallfromfile(i);
                         cout << "---------------------------\n";
                     }
                     getchar();
